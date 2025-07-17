@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-AppnominaApplication<appnomina>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.servicio.spring.appnomina.AppnominaApplication",
+            "projectName": "appnomina",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
