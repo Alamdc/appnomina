@@ -32,10 +32,15 @@ public class JsonGeneratorController {
     }
 
     private String convertToJson(FormData formData) {
-        // Conversión simple a JSON (se recomienda usar Jackson en proyectos reales)
-        return String.format("{\"nombre\":\"%s\",\"email\":\"%s\",\"edad\":%d,\"direccion\":\"%s\"}",
-                formData.getNombre(), formData.getEmail(), formData.getEdad(), formData.getDireccion());
-    }
+    return String.format(
+        "{\"nombre\":\"%s\",\"cuentaDestino\":\"%s\",\"bancoDestino\":\"%s\",\"monto\":%.2f,\"concepto\":\"%s\"}",
+        formData.getNombre(), 
+        formData.getCuentaDestino(), 
+        formData.getBancoDestino(), 
+        formData.getMonto(), 
+        formData.getConcepto()
+    );
+}
 
     @PostMapping("/upload-json")
     public String uploadJson(@RequestParam("file") MultipartFile file, Model model) {

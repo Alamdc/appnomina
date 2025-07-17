@@ -5,7 +5,8 @@ import lombok.Data;
 @Data
 public class FormData {
     private String nombre;
-    private String email;
-    private int edad;
-    private String direccion;
+    private String cuentaDestino;
+    private String bancoDestino;
+    private double monto;
+    private String concepto;
 }
