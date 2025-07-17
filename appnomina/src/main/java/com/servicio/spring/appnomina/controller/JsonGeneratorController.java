@@ -2,7 +2,6 @@ package com.servicio.spring.appnomina.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.servicio.spring.appnomina.model.FormData;
-
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,37 +31,46 @@ public class JsonGeneratorController {
     }
 
     private String convertToJson(FormData formData) {
-    return String.format(
-        "{\"nombre\":\"%s\",\"cuentaDestino\":\"%s\",\"bancoDestino\":\"%s\",\"monto\":%.2f,\"concepto\":\"%s\"}",
-        formData.getNombre(), 
-        formData.getCuentaDestino(), 
-        formData.getBancoDestino(), 
-        formData.getMonto(), 
-        formData.getConcepto()
-    );
-}
+        // Conversión manual a JSON
+        return String.format(
+            "{\"nombre\":\"%s\",\"cuentaDestino\":\"%s\",\"bancoDestino\":\"%s\",\"monto\":%.2f,\"concepto\":\"%s\"}",
+            formData.getNombre(),
+            formData.getCuentaDestino(),
+            formData.getBancoDestino(),
+            formData.getMonto(),
+            formData.getConcepto()
+        );
+    }
 
     @PostMapping("/upload-json")
     public String uploadJson(@RequestParam("file") MultipartFile file, Model model) {
-    if (file.isEmpty()) {
-        model.addAttribute("mensaje", "Por favor selecciona un archivo.");
+        if (file.isEmpty()) {
+            model.addAttribute("mensaje", "Por favor selecciona un archivo.");
+            return "form";
+        }
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            FormData formData = mapper.readValue(file.getInputStream(), FormData.class);
+
+            // Agregar los datos al modelo para mostrarlos en la vista
+            model.addAttribute("formData", formData);
+            model.addAttribute("mensaje", "JSON subido correctamente");
+
+        } catch (Exception e) {
+            model.addAttribute("mensaje", "Error al leer el JSON: " + e.getMessage());
+        }
+
         return "form";
     }
 
-    try {
-        ObjectMapper mapper = new ObjectMapper();
-        FormData formData = mapper.readValue(file.getInputStream(), FormData.class);
-        
-        // Agregar los datos al modelo para mostrarlos en la vista
-        model.addAttribute("formData", formData);
-        model.addAttribute("mensaje", "JSON subido correctamente");
+    @PostMapping("/enviar-nomina")
+    public String enviarNomina(Model model) throws InterruptedException {
+        // Simular tiempo de espera (como pantalla de carga)
+        Thread.sleep(2000); // 2 segundos
 
-    } catch (Exception e) {
-        model.addAttribute("mensaje", "Error al leer el JSON: " + e.getMessage());
+        model.addAttribute("mensaje", "Datos enviados exitosamente");
+        return "resultado-envio";
     }
-
-    return "form";
-}
-    
 }
 
